@@ -1,0 +1,17 @@
+APP_LINKS_RU = [
+    'https://apps.apple.com/ru/app/notion-notes-docs-tasks/id1232780281',
+    'https://apps.apple.com/ru/app/telegram-messenger/id686449807',
+    'https://apps.apple.com/ru/app/google-карты/id585027354',
+    'https://apps.apple.com/ru/app/forest-сосредоточьтесь/id866450515',
+    'https://apps.apple.com/ru/app/github/id1477376905',
+    'https://apps.apple.com/ru/app/ozon-товары-одежда-билеты/id407804998',
+    'https://apps.apple.com/ru/app/яндекс-пэй/id1634422317',
+    'https://apps.apple.com/ru/app/почта-россии/id771700826',
+    'https://apps.apple.com/ru/app/gmail-почта-от-google/id422689480',
+    'https://apps.apple.com/ru/app/invitro-медицинские-анализы/id1538601072',
+    'https://apps.apple.com/ru/app/вкусвилл-доставка-продуктов/id1399903464',
+    'https://apps.apple.com/ru/app/x/id333903271',
+    'https://apps.apple.com/ru/app/reddit/id1064216828',
+    'https://apps.apple.com/ru/app/duolingo-уроки-иностранного/id570060128',
+    'https://apps.apple.com/ru/app/iqair-airvisual-эко-воздух/id1048912974',
+]
