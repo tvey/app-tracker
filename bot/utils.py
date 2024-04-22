@@ -1,19 +1,29 @@
 import aiohttp
 
-from .links import APP_LINKS_RU
 
+class SiteMonitor:
+    def __init__(self, url):
+        self.url = url
+        self.failure_count = 0
+        self.is_up = True
 
-async def is_app_available(app_url: str) -> bool:
-    async with aiohttp.ClientSession() as session:
-        async with session.get(app_url) as r:
-            return r.status == 200
+    async def check(self, session):
+        try:
+            async with session.get(self.url) as r:
+                if r.status == 200:
+                    if not self.is_up:
+                        self.is_up = True
+                        return (self.url, True)
+                    self.failure_count = 0
+                else:
+                    self.failure_count += 1
+        except Exception as e:
+            print(f'Error checking {self.url}: {e}')
+            self.failure_count += 1
 
-
-async def check_apps():
-    apps = APP_LINKS_RU
-    for url in apps:  # can create tasks, probably
-        app_id = url.rsplit('id', maxsplit=1)[-1]
-        if await is_app_available(url):
-            print(f'{app_id} is fine')
-        else:
-            print(f'{app_id} is not available')
+        if self.failure_count >= 3:
+            if self.is_up:
+                self.is_up = False
+                return (self.url, False)
+                print(f'{self.url} is not available')
+        return None
