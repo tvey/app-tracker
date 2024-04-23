@@ -9,7 +9,6 @@ aiohttp = "*"
 sqlalchemy = "*"
 asyncpg = "*"
 python-dotenv = "*"
-apscheduler = "*"
 
 [dev-packages]
 

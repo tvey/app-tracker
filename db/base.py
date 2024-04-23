@@ -23,7 +23,8 @@ AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 async def create_tables():
     try:
         async with engine.begin() as conn:
-            logger.info('Creating tables...')
+            logger.info('(Re)creating tables...')
+            await conn.run_sync(Base.metadata.drop_all)
             await conn.run_sync(Base.metadata.create_all)
             logger.info('Tables created.')
     except Exception as e:

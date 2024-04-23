@@ -1,0 +1,18 @@
+services:
+  # bot:
+  #   build: .
+  #   restart: always
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - db
+  #   env_file: ./.env
+
+  db:
+    image: postgres:16
+    restart: always
+    ports:
+      - "5441:5432"
+    volumes:
+      - ${HOST_DATA_PATH}:/var/lib/postgresql/data
+    env_file: ./.env
