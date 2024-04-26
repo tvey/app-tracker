@@ -4,11 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-python-telegram-bot = "*"
 aiohttp = "*"
 sqlalchemy = "*"
 asyncpg = "*"
 python-dotenv = "*"
+validators = "*"
+python-telegram-bot = {extras = ["job-queue"], version = "*"}
 
 [dev-packages]
 

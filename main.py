@@ -5,11 +5,9 @@ import dotenv
 from telegram import Update
 from telegram.ext import (
     Application,
-    CommandHandler,
-    ContextTypes,
 )
-from bot import admin_handlers, user_handlers
-from db.base import create_tables
+from bot import admin_handlers, common_handlers
+from bot.tracker import track_availability
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -25,13 +23,15 @@ INTERVAL_MINUTES = int(os.getenv('INTERVAL_MINUTES', '1'))
 
 
 def main() -> None:
-    logging.info('Database tables created successfully.')
     application = Application.builder().token(BOT_TOKEN).build()
+    start_handler = common_handlers.handlers[0]
+    application.add_handler(start_handler)
 
-    for handler in (admin_handlers.handlers + user_handlers.handlers):
+    for handler in (admin_handlers.handlers + common_handlers.handlers[1:]):
         application.add_handler(handler)
 
-    print((admin_handlers.handlers + user_handlers.handlers))
+    job_queue = application.job_queue
+    job_queue.run_repeating(track_availability, interval=60, first=0)
 
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 

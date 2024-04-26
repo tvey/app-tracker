@@ -5,11 +5,11 @@ from sqlalchemy import (
     BigInteger,
     Integer,
     String,
-    Boolean,
     ForeignKey,
 )
+from sqlalchemy.orm import relationship
 
-from .base import Base
+from db.base import Base
 
 
 class Application(Base):
@@ -17,8 +17,9 @@ class Application(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     url = Column(String, unique=True, nullable=False)
-    name = Column(String, nullable=True)  # is nullable?
-    launch_url = Column(String, nullable=True)  # is nullable?
+    name = Column(String)
+    launch_url = Column(String)
+    failure_count = Column(Integer, default=0)
 
 
 class Admin(Base):
@@ -26,6 +27,7 @@ class Admin(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     telegram_id = Column(BigInteger, unique=True, nullable=False)
+    username = Column(String)
 
 
 class User(Base):
@@ -46,3 +48,9 @@ class AccessKey(Base):
         default=lambda: str(uuid.uuid4()).replace('-', ''),
         unique=True,
     )
+
+class Interval(Base):
+    __tablename__ = 'intervals'
+
+    id = Column(Integer, primary_key=True)
+    interval_seconds = Column(Integer, nullable=False)

@@ -1,5 +1,5 @@
 #!/bin/sh
 
-python create_tables.py
+python db/init_db.py
 
 python main.py
