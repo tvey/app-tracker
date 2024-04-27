@@ -1,14 +1,8 @@
 import asyncio
-import logging
 
+from logger_config import logger
 from db.base import Base, engine
 from db.models import Application, Admin, AccessKey, Interval, User  # import them!
-
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO,
-)
-logger = logging.getLogger(__name__)
 
 
 async def create_tables():

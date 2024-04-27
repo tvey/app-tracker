@@ -5,6 +5,7 @@ from sqlalchemy import select
 
 from db.base import AsyncSessionLocal
 from db.models import Admin
+from logger_config import logger
 
 
 async def add_admin(telegram_id: str):
@@ -14,13 +15,13 @@ async def add_admin(telegram_id: str):
         existing_admin = result.scalars().first()
 
         if existing_admin:
-            print(f'Админ с ID {telegram_id} уже в базе.')
+            logger.warning(f'Админ с ID {telegram_id} уже в базе.')
             return
 
         new_admin = Admin(telegram_id=telegram_id)
         session.add(new_admin)
         await session.commit()
-        print(f'Добавлен админ с Телеграм ID {telegram_id}')
+        logger.info(f'Добавлен админ с Телеграм ID {telegram_id}')
 
 
 def main():

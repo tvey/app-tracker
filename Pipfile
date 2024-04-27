@@ -10,6 +10,7 @@ asyncpg = "*"
 python-dotenv = "*"
 validators = "*"
 python-telegram-bot = {extras = ["job-queue"], version = "*"}
+loguru = "*"
 
 [dev-packages]
 

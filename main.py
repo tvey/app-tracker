@@ -1,4 +1,3 @@
-import logging
 import os
 
 import dotenv
@@ -9,12 +8,7 @@ from telegram.ext import (
 from bot import admin_handlers, common_handlers
 from bot.tracker import track_availability
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO,
-)
-logger = logging.getLogger(__name__)
-logging.getLogger('httpx').setLevel(logging.WARNING)
+# logging.getLogger('httpx').setLevel(logging.WARNING)
 
 dotenv.load_dotenv()
 
