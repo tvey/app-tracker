@@ -1,19 +1,13 @@
-import os
+import logging
 
-import dotenv
 from telegram import Update
-from telegram.ext import (
-    Application,
-)
+from telegram.ext import Application
+
 from bot import admin_handlers, common_handlers
 from bot.tracker import track_availability
+from config import BOT_TOKEN
 
-# logging.getLogger('httpx').setLevel(logging.WARNING)
-
-dotenv.load_dotenv()
-
-BOT_TOKEN = os.getenv('BOT_API_TOKEN')
-INTERVAL_MINUTES = int(os.getenv('INTERVAL_MINUTES', '1'))
+logging.getLogger('httpx').setLevel(logging.WARNING)
 
 
 def main() -> None:
@@ -21,7 +15,7 @@ def main() -> None:
     start_handler = common_handlers.handlers[0]
     application.add_handler(start_handler)
 
-    for handler in (admin_handlers.handlers + common_handlers.handlers[1:]):
+    for handler in admin_handlers.handlers + common_handlers.handlers[1:]:
         application.add_handler(handler)
 
     job_queue = application.job_queue
