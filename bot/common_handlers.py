@@ -1,11 +1,8 @@
 from telegram import (
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
     ReplyKeyboardMarkup,
     Update,
 )
 from telegram.ext import (
-    CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
     filters,
@@ -15,19 +12,8 @@ from telegram.ext import (
 
 import db.operations as ops
 from bot.admin_handlers import add_app, remove_app, set_interval, generate_key
-from bot.keyboards import app_list_keyboard
+from bot.keyboards import app_list_keyboard, admin_keyboard, user_keyboard
 from bot.utils import TEXTS as txt
-
-user_keyboard = [
-    [txt.app_list, txt.launch_links],
-    [txt.faq],
-]
-admin_keyboard = [
-    [txt.add_app, txt.remove_app],
-    [txt.set_interval, txt.generate_key],
-    [txt.app_list, txt.launch_links],
-    # [txt.broadcast],
-]
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -57,12 +43,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     'access_key': key,
                 }
                 await ops.create_user(data)
-                reply_markup = ReplyKeyboardMarkup(
-                    user_keyboard, resize_keyboard=True, one_time_keyboard=False
+
+                markup = ReplyKeyboardMarkup(
+                    user_keyboard,
+                    resize_keyboard=True,
+                    one_time_keyboard=False,
                 )
                 await update.message.reply_text(
                     'Доступ к боту успешно открыт!',
-                    reply_markup=reply_markup,
+                    reply_markup=markup,
                 )
             else:
                 await update.message.reply_text('Неверный ключ доступа')
@@ -100,7 +89,7 @@ async def handle_launch_call(
     await query.answer()
     app_id = int(query.data.split('_')[-1])
     app = await ops.get_app(app_id)
-    if app and app.url:
+    if app and app.launch_url:
         msg = f'Ссылка для запуска {app.name}: {app.launch_url}'
         await query.message.reply_text(msg)
     else:

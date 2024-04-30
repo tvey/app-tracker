@@ -1,15 +1,18 @@
-from telegram import (
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    ReplyKeyboardMarkup,
-)
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
+from bot.utils import TEXTS as txt
 
 
-def main_keyboard(user_type):
-    if user_type == 'admin':
-        pass
-    else:
-        pass
+user_keyboard = [
+    [txt.app_list, txt.launch_links],
+    [txt.faq],
+]
+
+admin_keyboard = [
+    [txt.add_app, txt.remove_app],
+    [txt.set_interval, txt.generate_key],
+    [txt.app_list, txt.launch_links],
+]
 
 
 def app_list_keyboard(apps, prefix):

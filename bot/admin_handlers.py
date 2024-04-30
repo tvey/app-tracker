@@ -51,7 +51,7 @@ async def add_app(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if result:
             msg = f'Приложение \"{new_app_data["app_name"]}\" добавлено'
         else:
-            msg = f'Приложение с таким URL уже существует'  # url is unique
+            msg = f'Приложение с таким URL уже существует'
         await update.message.reply_text(msg)
 
 
@@ -83,6 +83,7 @@ async def set_interval(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(txt.interval_example)
 
 
+@admin_only
 async def handle_interval(update: Update, context: CallbackContext):
     value = update.message.text
     seconds = parse_interval_input(value)
@@ -115,8 +116,12 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if users:
         for user in users:
             try:
-                await context.bot.send_message(chat_id=user.telegram_id, text=msg)
-            except Exception:  # some statuses
+                await context.bot.send_message(
+                    chat_id=user.telegram_id,
+                    text=msg,
+                    parse_mode='HTML',
+                )
+            except Exception:
                 pass
 
 
