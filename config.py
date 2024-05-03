@@ -8,7 +8,7 @@ dotenv.load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_API_TOKEN')
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = os.getenv('DATABASE_URL', '')
 SQLALCHEMY_ECHO = bool(os.getenv('SQLALCHEMY_ECHO'))
 
 logger.add(

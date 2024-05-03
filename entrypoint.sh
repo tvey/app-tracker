@@ -1,5 +1,5 @@
 #!/bin/sh
 
-python db/init_db.py
+alembic upgrade head
 
 python main.py

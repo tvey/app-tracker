@@ -11,6 +11,7 @@ python-dotenv = "*"
 validators = "*"
 python-telegram-bot = {extras = ["job-queue"], version = "*"}
 loguru = "*"
+alembic = "*"
 
 [dev-packages]
 
