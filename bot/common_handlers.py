@@ -11,9 +11,9 @@ from telegram.ext import (
 )
 
 import db.operations as ops
-from bot.admin_handlers import add_app, remove_app, set_interval, generate_key
-from bot.keyboards import app_list_keyboard, admin_keyboard, user_keyboard
-from bot.utils import TEXTS as txt
+from .admin_handlers import add_app, remove_app, set_interval, generate_key
+from .keyboards import app_list_keyboard, admin_keyboard, user_keyboard
+from .utils import TEXTS as txt
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):

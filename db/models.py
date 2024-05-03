@@ -1,15 +1,14 @@
 import uuid
+from typing import Optional
 
 from sqlalchemy import (
     Column,
     BigInteger,
     Integer,
     String,
-    ForeignKey,
 )
-from sqlalchemy.orm import relationship
 
-from db.base import Base
+from .base import Base
 
 
 class Application(Base):

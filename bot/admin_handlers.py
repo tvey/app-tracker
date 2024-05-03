@@ -12,8 +12,8 @@ from telegram.ext import (
 )
 
 import db.operations as ops
-from bot.keyboards import app_list_keyboard
-from bot.utils import is_valid_url, parse_interval_input, TEXTS as txt
+from .keyboards import app_list_keyboard
+from .utils import is_valid_url, parse_interval_input, TEXTS as txt
 
 
 def admin_only(func):

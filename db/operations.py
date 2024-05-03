@@ -1,10 +1,10 @@
-from typing import Sequence
+from collections.abc import Sequence
 
 from sqlalchemy import select, delete
 from sqlalchemy.exc import IntegrityError
 
-from db.base import AsyncSessionLocal
-from db.models import AccessKey, Admin, Application, Interval, User
+from .base import AsyncSessionLocal
+from .models import AccessKey, Admin, Application, Interval, User
 
 
 async def get_admin_ids() -> Sequence[int]:

@@ -1,6 +1,6 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from bot.utils import TEXTS as txt
+from .utils import TEXTS as txt
 
 
 user_keyboard = [

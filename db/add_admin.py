@@ -3,8 +3,8 @@ import asyncio
 
 from sqlalchemy import select
 
-from db.base import AsyncSessionLocal
-from db.models import Admin
+from .base import AsyncSessionLocal
+from .models import Admin
 from config import logger
 
 
