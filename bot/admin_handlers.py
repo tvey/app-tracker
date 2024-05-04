@@ -1,5 +1,3 @@
-import re
-from functools import wraps
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
@@ -13,19 +11,7 @@ from telegram.ext import (
 
 import db.operations as ops
 from .keyboards import app_list_keyboard
-from .utils import is_valid_url, parse_interval_input, TEXTS as txt
-
-
-def admin_only(func):
-    @wraps(func)
-    async def wrapped(update, context, *args, **kwargs):
-        user_id = update.effective_user.id
-        is_admin = await ops.is_admin(user_id)
-        if not is_admin:
-            return
-        return await func(update, context, *args, **kwargs)
-
-    return wrapped
+from .utils import admin_only, is_valid_url, parse_interval_input, TEXTS as txt
 
 
 @admin_only

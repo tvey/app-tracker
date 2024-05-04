@@ -13,7 +13,7 @@ from telegram.ext import (
 import db.operations as ops
 from .admin_handlers import add_app, remove_app, set_interval, generate_key
 from .keyboards import app_list_keyboard, admin_keyboard, user_keyboard
-from .utils import TEXTS as txt
+from .utils import protected, TEXTS as txt
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -57,6 +57,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await update.message.reply_text('Неверный ключ доступа')
 
 
+@protected
 async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Show app list."""
     apps = await ops.get_app_list()
@@ -69,6 +70,7 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(msg, disable_web_page_preview=True)  # dis
 
 
+@protected
 async def get_launch_urls(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """List apps and return assigned launch_url on button press."""
     apps = await ops.get_app_list()
@@ -82,6 +84,7 @@ async def get_launch_urls(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(txt.app_list_empty)
 
 
+@protected
 async def handle_launch_call(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ):
@@ -96,10 +99,12 @@ async def handle_launch_call(
         await query.message.reply_text(f'Нет ссылки для запуска {app.name}')
 
 
+@protected
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Вопросы и ответы')
 
 
+@protected
 async def handle_button_text(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ):

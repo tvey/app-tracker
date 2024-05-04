@@ -87,6 +87,14 @@ async def get_user_list() -> Sequence[Application]:
         return result.scalars().all()
 
 
+async def is_existing_user(telegram_id: int) -> bool:
+    async with AsyncSessionLocal() as session:
+        stmt = select(User).where(User.telegram_id == telegram_id)
+        result = await session.execute(stmt)
+        user = result.one_or_none()
+        return bool(user)
+
+
 async def add_app(data: dict) -> bool:
     async with AsyncSessionLocal() as session:
         try:

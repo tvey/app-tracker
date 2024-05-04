@@ -1,7 +1,10 @@
 import re
+from functools import wraps
 from types import SimpleNamespace
 
 import validators
+
+import db.operations as ops
 
 TEXTS = SimpleNamespace(
     app_list='Список приложений',
@@ -19,8 +22,35 @@ TEXTS = SimpleNamespace(
     set_interval='Задать интервал',
     interval_example='Присылай интервал в формате: "10 минут", "3 часа" и т.п.',
     app_list_empty='Список приложений пуст',
-    bloadcast_memo='Сообщение нужно добавить после команды: /broadcast <текст>'
+    bloadcast_memo='Сообщение нужно добавить после команды: /broadcast <текст>',
 )
+
+
+def admin_only(func):
+    @wraps(func)
+    async def wrapped(update, context, *args, **kwargs):
+        user_id = update.effective_user.id
+        is_admin = await ops.is_admin(user_id)
+        if not is_admin:
+            return
+        return await func(update, context, *args, **kwargs)
+
+    return wrapped
+
+
+def protected(func):
+    """Decorate handlers to allow access only to existing users and admins."""
+    @wraps(func)
+    async def wrapped(update, context, *args, **kwargs):
+        user_id = update.effective_user.id
+        is_admin = await ops.is_admin(user_id)
+        is_user = await ops.is_existing_user(user_id)
+        if not is_admin and not is_user:
+            return
+        return await func(update, context, *args, **kwargs)
+
+    return wrapped
+ 
 
 
 def parse_interval_input(value: str) -> int:
