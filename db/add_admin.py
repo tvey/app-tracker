@@ -3,9 +3,9 @@ import asyncio
 
 from sqlalchemy import select
 
+from config import logger
 from .base import AsyncSessionLocal
 from .models import Admin
-from config import logger
 
 
 async def add_admin(telegram_id: str):

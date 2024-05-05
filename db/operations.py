@@ -3,6 +3,7 @@ from collections.abc import Sequence
 from sqlalchemy import select, delete
 from sqlalchemy.exc import IntegrityError
 
+from config import logger
 from .base import AsyncSessionLocal
 from .models import AccessKey, Admin, Application, Interval, User
 
@@ -18,8 +19,9 @@ async def is_admin(telegram_id: int) -> bool:
     async with AsyncSessionLocal() as session:
         stmt = select(Admin).where(Admin.telegram_id == telegram_id)
         result = await session.execute(stmt)
-        admin = result.one_or_none()
-        return bool(admin)
+        is_admin = bool(result.one_or_none())
+        logger.info(f'Is {telegram_id} admin: {is_admin}')
+        return is_admin
 
 
 async def set_interval(seconds: int) -> None:
@@ -28,10 +30,13 @@ async def set_interval(seconds: int) -> None:
         existing_interval = result.scalars().one_or_none()
 
         if existing_interval:
+            current = existing_interval.interval_seconds
+            logger.info(f'Inverval change from {current} to {seconds} seconds')
             existing_interval.interval_seconds = seconds
         else:
             new_interval = Interval(interval_seconds=seconds)
             session.add(new_interval)
+            logger.info(f'New interval: {seconds} seconds')
         await session.commit()
 
 
@@ -51,6 +56,7 @@ async def generate_key() -> str:
         new_key = AccessKey()
         session.add(new_key)
         await session.commit()
+        logger.info(f'New access key generated: ...{new_key.key[-5:]}')
         return new_key.key
 
 
@@ -58,7 +64,9 @@ async def is_key_valid(key: str) -> bool:
     async with AsyncSessionLocal() as session:
         stmt = select(AccessKey).where(AccessKey.key == key)
         db_key = await session.execute(stmt)
-        return bool(db_key.one_or_none())
+        is_valid = bool(db_key.one_or_none()) 
+        logger.info(f'Is key ...{key[-5:]} valid: {is_valid}')
+        return is_valid
 
 
 async def create_user(data: dict):
@@ -79,6 +87,7 @@ async def create_user(data: dict):
             session.add(new_user)
             await session.execute(delete(AccessKey).where(AccessKey.key == key))
             await session.commit()
+            logger.info(f'User with telegram ID {telegram_id} created')
 
 
 async def get_user_list() -> Sequence[Application]:
@@ -105,6 +114,7 @@ async def add_app(data: dict) -> bool:
             )
             session.add(new_app)
             await session.commit()
+            logger.info(f'App {new_app.name} added')
             return True
         except IntegrityError:
             await session.rollback()
@@ -141,8 +151,10 @@ async def update_failure_count(app_id: int, reset: bool = True):
         if app:
             if reset:
                 app.failure_count = 0
+                logger.info(f'Failure count reset for app {app.name}')
             else:
                 app.failure_count += 1
+                logger.info(f'Failure count increase for app {app.name}')
             
             session.add(app)
             await session.commit()

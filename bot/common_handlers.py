@@ -11,16 +11,18 @@ from telegram.ext import (
 )
 
 import db.operations as ops
+from config import logger
 from .admin_handlers import add_app, remove_app, set_interval, generate_key
 from .keyboards import app_list_keyboard, admin_keyboard, user_keyboard
 from .utils import protected, TEXTS as txt
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_chat_id = update.effective_user.id
-    is_admin = await ops.is_admin(user_chat_id)
+    user_id = update.effective_user.id
+    is_admin = await ops.is_admin(user_id)
 
     if is_admin:
+        logger.info(f'Admin user {user_id} called start command')
         markup = ReplyKeyboardMarkup(
             admin_keyboard,
             resize_keyboard=True,
@@ -31,6 +33,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         key = context.args[0] if context.args else None
 
         if not key:
+            logger.info(f'User {user_id} called start without key')
             msg = 'Добавьте ключ доступа: /start <ключ>'
             await update.message.reply_text(msg)
         else:
@@ -38,7 +41,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             if is_valid:
                 data = {
-                    'telegram_id': user_chat_id,
+                    'telegram_id': user_id,
                     'username': update.effective_user.username,
                     'access_key': key,
                 }
@@ -53,7 +56,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     'Доступ к боту успешно открыт!',
                     reply_markup=markup,
                 )
+                logger.info(f'User {user_id} successfully got access to bot')
             else:
+                logger.info(f'User {user_id} called start with bad key {key}')
                 await update.message.reply_text('Неверный ключ доступа')
 
 
@@ -61,6 +66,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Show app list."""
     apps = await ops.get_app_list()
+
     if apps:
         msg = 'Список приложений:\n\n'
         for app in apps:
