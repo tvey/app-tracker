@@ -115,8 +115,8 @@ handlers = [
     CommandHandler('add', add_app),
     CommandHandler('remove', remove_app),
     CallbackQueryHandler(handle_remove_call, pattern=r'^remove_'),
-    CommandHandler('setinterval', set_interval),
-    CommandHandler('generatekey', generate_key),
+    CommandHandler('interval', set_interval),
+    CommandHandler('genkey', generate_key),
     CommandHandler('broadcast', broadcast),
     MessageHandler(
         filters.Regex(r'\d+\s+(час(а|ов)?|минут(а|ы)?|секунд(а|ы)?)'),

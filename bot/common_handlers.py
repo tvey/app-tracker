@@ -63,7 +63,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @protected
-async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def list_apps(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Show app list."""
     apps = await ops.get_app_list()
 
@@ -116,7 +116,7 @@ async def handle_button_text(
 ):
     text = update.message.text
     if text == txt.app_list:
-        return await status(update, context)
+        return await list_apps(update, context)
     elif text == txt.launch_links:
         return await get_launch_urls(update, context)
     elif text == txt.faq:
@@ -133,8 +133,8 @@ async def handle_button_text(
 
 handlers = [
     CommandHandler('start', start),
-    CommandHandler('status', status),
-    CommandHandler('getlaunchlinks', get_launch_urls),
+    CommandHandler('list', list_apps),
+    CommandHandler('launch', get_launch_urls),
     MessageHandler(
         filters.Text(
             [
